@@ -1,0 +1,64 @@
+#include <DHT.h>
+
+#define brocheDeBranchementDHT1 6     // Pour le premier capteur DHT (près de la gourde)
+#define brocheDeBranchementDHT2 8     // Pour le deuxième capteur DHT (à l'extérieur)
+#define typeDeDHT DHT22
+
+
+//Initialisation des capteurs DHT22
+DHT dht1(brocheDeBranchementDHT1, typeDeDHT);//Pour le premier capteur DHT
+DHT dht2(brocheDeBranchementDHT2, typeDeDHT);//Pour le deuxième capteur DHT. On peut faire de même si on veut ajouter d'autres capteurs
+
+float getTemp(int dhtCount)
+{
+
+  if(dhtCount ==1){
+    // Lire le Taux d'humidité
+    float h1 = dht1.readHumidity();
+    // Lire la température en Celsius
+    float t1 = dht1.readTemperature();
+    return(t1);
+         
+
+  }// DHT1 end
+
+
+  if(dhtCount ==2){
+    // Lire la température en Celsius
+    float t2 = dht2.readTemperature();
+    return(t2);
+
+  }
+}
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Activation de la gourde connecté !");
+  Serial.println("=====================");
+
+  dht1.begin();//Pour le premier capteur DHT
+  dht2.begin();//Pour le deuxième capteur DHT. On peut faire de même si on veut ajouter d'autres capteurs
+}
+
+void loop() {
+
+  float t1;
+  float t2;
+  float h1;
+
+  t1 = getTemp(1);
+  h1 = dht1.readHumidity();
+  t2 = getTemp(2);
+  
+  Serial.print("Température de la gourde = ");
+  Serial.print(t1);
+  Serial.println(" °C");
+  Serial.print("Taux d'humidité près de la gourde = ");
+  Serial.print(h1);
+  Serial.println(" %");
+  Serial.print("Température extérieur = ");
+  Serial.print(t2);
+  Serial.println(" °C");
+
+  delay(2000);
+}
